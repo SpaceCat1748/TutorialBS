@@ -2,9 +2,20 @@ import os
 import time
 from csv import writer
 import csv
-import pandas as pd
+try:
+	import pandas as pd
+except ModuleNotFoundError:
+	os.system("pip install pandas")
 import shutil
 import json
+
+if not os.path.isdir("./defolt/backuped") and not os.path.isdir("./output"):
+    	os.mkdir("./output")
+    	os.mkdir("./defolt/backuped")
+else:
+	pass
+
+verse = "1.67 Beta"
 
 pon = os.listdir("./defolt/files")
 ok = len(os.listdir("./defolt/files"))
@@ -64,7 +75,6 @@ else:
         clear()
         checkrus()
 
-    
 class style():
     BLACK = '\033[30m'
     RED = '\033[31m'
@@ -76,48 +86,79 @@ class style():
     WHITE = '\033[37m'
     UNDERLINE = '\033[4m'
     RESET = '\033[0m'
+    
+
+
 
 def menu():
-    print (f"{style.GREEN}-------------SpaceCat1748 edition--------------")
+    print (f"{style.GREEN}             TutorialBS | Version: {verse} | Author: SpaceCat")
     print (f"{style.CYAN}1. Edit Robots in tutorial")
-    print (f"{style.CYAN}2. Add Character")
+    print (f"{style.CYAN}2. Copy Character")
     print (f"{style.CYAN}3. Exit")
 
 def menuRussian():
-    print (f"{style.GREEN}-------------SpaceCat1748 версия--------------")
+    print (f"{style.GREEN}             TutorialBS | Версия: {verse} | Автор: SpaceCat")
     print (f"{style.CYAN}1. Изменить ботов в tutorial.csv")
     print (f"{style.CYAN}2. Скопировать перса в characters.csv")
     print (f"{style.CYAN}3. Выход")
 
         
-def copy():
-    shutil.copy("./defolt/files/characters.csv", "./output/characters.csv")
-    selectedcharacters = input("shelly\ncolt\nbull\nbrock\nricochet\nspike\nbarley\njessie\nnita\ndynamike\nelprimo\nmortis\ncrow\npoco\nbo\npiper\npam\ntara\ndarryl\npenny\nfrank\ngene\ntick\nleon\nrosa\ncarl\nbibi\n8bit\nsandy\nbea\nemz\nmr.p\nmax\njacky\ngale\nnani\nsprout\nsurge\ncolette\namber\nlou\nbyron\nedgar\nruffs\nstu\nbelle\nsqueak\ngrom\nbuzz\ngriff\nash\nmeg\nlolla\nfang\neve\njanet\nbonnie\notis\nsam\ngus\nbuster\nchester\ngray\nmandy\n Select: ")
-    with open('./output/characters.csv', 'r') as ef, open('./output/characters.csv', 'a') as of:
-        for line in ef:
-            if selectedcharacters in line:
-                if "human" in line:
-                    of.write(line)
-    print("added")
-    time.sleep(3)
-    clear()
-
-    shutil.copy("./output/characters.csv", "./defolt/backuped/characters.csv")
+def copyeng():
+     shutil.copy("./defolt/files/characters.csv", "./output/characters.csv")
+     shutil.copy("./defolt/files/characters_1.csv", "./output/characters_1.csv")
+     selectedcharacters = input("shelly\ncolt\nbull\nbrock\nricochet\nspike\nbarley\njessie\nnita\ndynamike\nelprimo\nmortis\ncrow\npoco\nbo\npiper\npam\ntara\ndarryl\npenny\nfrank\ngene\ntick\nleon\nrosa\ncarl\nbibi\n8bit\nsandy\nbea\nemz\nmr.p\nmax\njacky\ngale\nnani\nsprout\nsurge\ncolette\namber\nlou\nbyron\nedgar\nruffs\nstu\nbelle\nsqueak\ngrom\nbuzz\ngriff\nash\nmeg\nlolla\nfang\nFlea\njanet\nbonnie\notis\nsam\ngus\nbuster\nchester\ngray\nmandy\n Select: ")
+     with open('./output/characters.csv', 'r') as ef, open('./output/characters_1.csv', 'a') as of:
+                for line in ef:
+                    if selectedcharacters in line:
+                        if "human" in line:
+                           of.write(line)
+     df = pd.read_csv("./output/characters_1.csv")
+     for index, row in df.iterrows():
+                    	if df.loc[index,'Type'] == "Hero":
+                    		df.loc[index,'Type'] = "Minion_Building"
+                    		hue = input(f"{style.YELLOW}Custom Brawler Name:\n{style.WHITE}")
+                    		df.loc[index,'Name'] =hue
+                    		df.to_csv('./output/characters_1.csv', index=False)
+                    	
+     with open('./output/characters_1.csv', 'r') as ef, open('./output/characters.csv', 'a') as of:
+            for line in ef:
+                if selectedcharacters in line:
+                    if "human" in line:
+                    	of.write(line)
+            print("Copied")
+            time.sleep(3)
+            clear()
+            shutil.copy("./output/characters.csv", "./defolt/backuped/characters.csv")
+            shutil.copy("./output/characters_1.csv", "./defolt/backuped/characters_1.csv")
 
 def copyrus():
-    shutil.copy("./defolt/files/characters.csv", "./output/characters.csv")
-    selectedcharacters = input("shelly\ncolt\nbull\nbrock\nricochet\nspike\nbarley\njessie\nnita\ndynamike\nelprimo\nmortis\ncrow\npoco\nbo\npiper\npam\ntara\ndarryl\npenny\nfrank\ngene\ntick\nleon\nrosa\ncarl\nbibi\n8bit\nsandy\nbea\nemz\nmr.p\nmax\njacky\ngale\nnani\nsprout\nsurge\ncolette\namber\nlou\nbyron\nedgar\nruffs\nstu\nbelle\nsqueak\ngrom\nbuzz\ngriff\nash\nmeg\nlolla\nfang\neve\njanet\nbonnie\notis\nsam\ngus\nbuster\nchester\ngray\nmandy\n Выберете: ")
-    with open('./output/characters.csv', 'r') as ef, open('./output/characters.csv', 'a') as of:
-        for line in ef:
-            if selectedcharacters in line:
-                if "human" in line:
-                    of.write(line)
-
-    print("Скопирован")
-    time.sleep(3)
-    clear()
-    shutil.copy("./output/characters.csv", "./defolt/backuped/characters.csv")
-
+     shutil.copy("./defolt/files/characters.csv", "./output/characters.csv")
+     shutil.copy("./defolt/files/characters_1.csv", "./output/characters_1.csv")
+     selectedcharacters = input("shelly\ncolt\nbull\nbrock\nricochet\nspike\nbarley\njessie\nnita\ndynamike\nelprimo\nmortis\ncrow\npoco\nbo\npiper\npam\ntara\ndarryl\npenny\nfrank\ngene\ntick\nleon\nrosa\ncarl\nbibi\n8bit\nsandy\nbea\nemz\nmr.p\nmax\njacky\ngale\nnani\nsprout\nsurge\ncolette\namber\nlou\nbyron\nedgar\nruffs\nstu\nbelle\nsqueak\ngrom\nbuzz\ngriff\nash\nmeg\nlolla\nfang\nFlea\njanet\nbonnie\notis\nsam\ngus\nbuster\nchester\ngray\nmandy\n Выберете:")
+     with open('./output/characters.csv', 'r') as ef, open('./output/characters_1.csv', 'a') as of:
+                for line in ef:
+                    if selectedcharacters in line:
+                        if "human" in line:
+                           of.write(line)
+     df = pd.read_csv("./output/characters_1.csv")
+     for index, row in df.iterrows():
+                    	if df.loc[index,'Type'] == "Hero":
+                    		df.loc[index,'Type'] = "Minion_Building"
+                    		hue = input(f"{style.YELLOW}Имя Кастом Бойца:\n{style.WHITE}")
+                    		df.loc[index,'Name'] =hue
+                    		df.to_csv('./output/characters_1.csv', index=False)
+                    	
+     with open('./output/characters_1.csv', 'r') as ef, open('./output/characters.csv', 'a') as of:
+            for line in ef:
+                if selectedcharacters in line:
+                    if "human" in line:
+                    	of.write(line)
+            print("Скопирован")
+            time.sleep(3)
+            clear()
+            shutil.copy("./output/characters.csv", "./defolt/backuped/characters.csv")
+            shutil.copy("./output/characters_1.csv", "./defolt/backuped/characters_1.csv")
+    
 if os.path.isfile("./eng.json"):
     while True:
         menu()
@@ -125,7 +166,8 @@ if os.path.isfile("./eng.json"):
             pon = int(input(f"{style.CYAN}Select: {style.WHITE}"))
         except ValueError:
             print(f"{style.RED}You wrote the word...{style.WHITE}")
-            quit()
+            time.sleep(3)
+            clear()
 
         if pon == 1:
             franxx = input("Write Custom Brawler name:\n")
@@ -150,19 +192,51 @@ if os.path.isfile("./eng.json"):
                     shutil.copy("./output/tutorial.csv", "./defolt/backuped/tutorial.csv")
             clear()
         elif pon == 2:
-            copy()
-            time.sleep(3)
-            clear()
+            if os.path.isfile("./defolt/backuped/characters.csv") and os.path.isfile("./defolt/backuped/characters_1.csv"):
+                franxx2 = int(input("Use backup?\n1. Да\n2. Нет\n"))
+                if franxx2 == 1:
+                     selectedcharacters = input("shelly\ncolt\nbull\nbrock\nricochet\nspike\nbarley\njessie\nnita\ndynamike\nelprimo\nmortis\ncrow\npoco\nbo\npiper\npam\ntara\ndarryl\npenny\nfrank\ngene\ntick\nleon\nrosa\ncarl\nbibi\n8bit\nsandy\nbea\nemz\nmr.p\nmax\njacky\ngale\nnani\nsprout\nsurge\ncolette\namber\nlou\nbyron\nedgar\nruffs\nstu\nbelle\nsqueak\ngrom\nbuzz\ngriff\nash\nmeg\nlolla\nfang\nFlea\njanet\nbonnie\notis\nsam\ngus\nbuster\nchester\ngray\nmandy\n Select: ")
+                     with open('./defolt/backuped/characters.csv', 'r') as ef, open('./defolt/backuped/characters_1.csv', 'a') as of:
+                     		for line in ef:
+                     			if selectedcharacters in line:
+                     				if "human" in line:
+                     					of.write(line)
+                     df = pd.read_csv("./defolt/backuped/characters_1.csv")
+                     for index, row in df.iterrows():
+                     	if df.loc[index,'Type'] == "Hero":
+                     		df.loc[index,'Type'] = "Minion_Building"
+                     		hue = input(f"{style.YELLOW}Custom Brawler Name:\n{style.WHITE}")
+                     		df.loc[index,'Name'] = hue
+                     		df.to_csv('./defolt/backuped/characters_1.csv', index=False)
+                    	
+                     with open('./defolt/backuped/characters_1.csv', 'r') as cum, open('./defolt/backuped/characters.csv', 'a') as es:
+                     		for line in cum:
+                     			if selectedcharacters in line:
+                     			            if "human" in line:
+                     			                        es.write(line)
+                     print("Copied")
+                     time.sleep(3)
+                     clear()
+                elif franxx2 == 2:
+                     copyeng()
+                     time.sleep(3)
+                     clear()
+            else:
+                copyeng()
+                time.sleep(3)
+                clear()
+        	
         elif pon == 3:
             quit()
 elif os.path.isfile("./rus.json"):
     while True:
         menuRussian()
         try:
-            pon = int(input(f"{style.CYAN}Select: {style.WHITE}"))
+            pon = int(input(f"{style.CYAN}Выберите: {style.WHITE}"))
         except ValueError:
             print(f"{style.RED}Ты слово написал...{style.WHITE}")
-            quit()
+            time.sleep(3)
+            clear()
     
         if pon == 1:
             franxx = input("Имя кастомного бравлера:\n")
@@ -187,31 +261,39 @@ elif os.path.isfile("./rus.json"):
                     shutil.copy("./output/tutorial.csv", "./defolt/backuped/tutorial.csv")
             clear()
         elif pon == 2:
-            if os.path.isfile("./defolt/backuped/characters.csv"):
+            if os.path.isfile("./defolt/backuped/characters.csv") and os.path.isfile("./defolt/backuped/characters_1.csv"):
                 franxx2 = int(input("Хотите использовать бэкап?\n1. Да\n2. Нет\n"))
                 if franxx2 == 1:
-                    print("ok")
-                    selectedcharacters = input("shelly\ncolt\nbull\nbrock\nricochet\nspike\nbarley\njessie\nnita\ndynamike\nelprimo\nmortis\ncrow\npoco\nbo\npiper\npam\ntara\ndarryl\npenny\nfrank\ngene\ntick\nleon\nrosa\ncarl\nbibi\n8bit\nsandy\nbea\nemz\nmr.p\nmax\njacky\ngale\nnani\nsprout\nsurge\ncolette\namber\nlou\nbyron\nedgar\nruffs\nstu\nbelle\nsqueak\ngrom\nbuzz\ngriff\nash\nmeg\nlolla\nfang\neve\njanet\nbonnie\notis\nsam\ngus\nbuster\nchester\ngray\nmandy\n Выберете: ")
-                    with open('./output/characters.csv', 'r') as ef, open('./output/characters.csv', 'a') as of:
-                        for line in ef:
-                            if selectedcharacters in line:
-                                if "human" in line:
-                                    of.write(line)
-                    print("Скопирован")
-                    time.sleep(3)
-                    clear()
-                    shutil.copy("./output/characters.csv", "./defolt/backuped/characters.csv")             
+                     selectedcharacters = input("shelly\ncolt\nbull\nbrock\nricochet\nspike\nbarley\njessie\nnita\ndynamike\nelprimo\nmortis\ncrow\npoco\nbo\npiper\npam\ntara\ndarryl\npenny\nfrank\ngene\ntick\nleon\nrosa\ncarl\nbibi\n8bit\nsandy\nbea\nemz\nmr.p\nmax\njacky\ngale\nnani\nsprout\nsurge\ncolette\namber\nlou\nbyron\nedgar\nruffs\nstu\nbelle\nsqueak\ngrom\nbuzz\ngriff\nash\nmeg\nlolla\nfang\nFlea\njanet\nbonnie\notis\nsam\ngus\nbuster\nchester\ngray\nmandy\n Выберете: ")
+                     with open('./defolt/backuped/characters.csv', 'r') as ef, open('./defolt/backuped/characters_1.csv', 'a') as of:
+                     		for line in ef:
+                     			if selectedcharacters in line:
+                     				if "human" in line:
+                     					of.write(line)
+                     df = pd.read_csv("./defolt/backuped/characters_1.csv")
+                     for index, row in df.iterrows():
+                     	if df.loc[index,'Type'] == "Hero":
+                     		df.loc[index,'Type'] = "Minion_Building"
+                     		hue = input(f"{style.YELLOW}Имя Кастом Бойца:\n{style.WHITE}")
+                     		df.loc[index,'Name'] = hue
+                     		df.to_csv('./defolt/backuped/characters_1.csv', index=False)
+                    	
+                     with open('./defolt/backuped/characters_1.csv', 'r') as cum, open('./defolt/backuped/characters.csv', 'a') as es:
+                     		for line in cum:
+                     			if selectedcharacters in line:
+                     			            if "human" in line:
+                     			                        es.write(line)
+                     print("Скопирован")
+                     time.sleep(3)
+                     clear()
                 elif franxx2 == 2:
-                    copyrus()
-                    time.sleep(3)
-                    clear()
+                     copyrus()
+                     time.sleep(3)
+                     clear()
             else:
                 copyrus()
                 time.sleep(3)
                 clear()
         elif pon == 3:
-            quit()
-        elif pon > 3:
-            print(f"{style.CYAN}Такого пункта пока нету {style.WHITE}")
             quit()
     
