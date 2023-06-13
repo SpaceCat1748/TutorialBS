@@ -2,18 +2,20 @@ import os
 import time
 from csv import writer
 import csv
-try:
-	import pandas as pd
-except ModuleNotFoundError:
-	os.system("pip install pandas")
 import shutil
 import json
+from assets import down
+from colorama import Fore, Back, Style
+try:
+                import pandas as pd
+except ModuleNotFoundError:
+                os.system("pip install pandas")
 
 if not os.path.isdir("./defolt/backuped") and not os.path.isdir("./output"):
-    	os.mkdir("./output")
-    	os.mkdir("./defolt/backuped")
+                os.mkdir("./output")
+                os.mkdir("./defolt/backuped")
 else:
-	pass
+                pass
 
 verse = "1.67 Beta"
 
@@ -25,11 +27,10 @@ def clear():
 
 def checkrus():
     if os.path.isfile("rus.json"):
-        if ok == 0:
-            print("Нужны файлы tutorial.csv и characters.csv")
+        if ok == 1:
+            print("Скачиваю файлы")
+            down("bs", 4, "./defolt/files")
         else:
-            if ok == 1:
-                print("Чего то не хватает")
             if os.path.isfile("./defolt/files/characters.csv") and os.path.isfile("./defolt/files/tutorial.csv"):
                 print("Все найдено!\nПриступаю к работе!")
                 time.sleep(3)
@@ -37,11 +38,10 @@ def checkrus():
 
 def check():
     if os.path.isfile("eng.json"):
-        if ok == 0:
+        if ok == 1:
             print("Need files tutorial.csv и characters.csv")
+            down("bs", 4, "./defolt/files")
         else:
-            if ok == 1:
-                print("Something missing")
             if os.path.isfile("./defolt/files/characters.csv") and os.path.isfile("./defolt/files/tutorial.csv"):
                 print("All founded!")
                 time.sleep(3)
@@ -91,16 +91,16 @@ class style():
 
 
 def menu():
-    print (f"{style.GREEN}             TutorialBS | Version: {verse} | Author: SpaceCat")
-    print (f"{style.CYAN}1. Edit Robots in tutorial")
-    print (f"{style.CYAN}2. Copy Character")
-    print (f"{style.CYAN}3. Exit")
+    print (Fore.GREEN + f"                        TutorialBS | Version: {verse} | Author: SpaceCat")
+    print (Fore.CYAN + "1. Edit Robots in tutorial")
+    print (Fore.CYAN + "2. Copy Character")
+    print (Fore.CYAN + "3. Exit")
 
 def menuRussian():
-    print (f"{style.GREEN}             TutorialBS | Версия: {verse} | Автор: SpaceCat")
-    print (f"{style.CYAN}1. Изменить ботов в tutorial.csv")
-    print (f"{style.CYAN}2. Скопировать перса в characters.csv")
-    print (f"{style.CYAN}3. Выход")
+    print (Fore.GREEN + f"                   TutorialBS | Версия: {verse} | Автор: SpaceCat")
+    print (Fore.CYAN + "1. Изменить ботов в tutorial.csv")
+    print (Fore.CYAN + "2. Скопировать перса в characters.csv")
+    print (Fore.CYAN + "3. Выход")
 
         
 def copyeng():
@@ -114,22 +114,46 @@ def copyeng():
                            of.write(line)
      df = pd.read_csv("./output/characters_1.csv")
      for index, row in df.iterrows():
-                    	if df.loc[index,'Type'] == "Hero":
-                    		df.loc[index,'Type'] = "Minion_Building"
-                    		hue = input(f"{style.YELLOW}Custom Brawler Name:\n{style.WHITE}")
-                    		df.loc[index,'Name'] =hue
-                    		df.to_csv('./output/characters_1.csv', index=False)
-                    	
-     with open('./output/characters_1.csv', 'r') as ef, open('./output/characters.csv', 'a') as of:
-            for line in ef:
-                if selectedcharacters in line:
-                    if "human" in line:
-                    	of.write(line)
-            print("Copied")
-            time.sleep(3)
-            clear()
-            shutil.copy("./output/characters.csv", "./defolt/backuped/characters.csv")
-            shutil.copy("./output/characters_1.csv", "./defolt/backuped/characters_1.csv")
+         if df.loc[index,'Type'] == "Hero":
+                                                df.loc[index,'Type'] = "Minion_Building"
+                                                hue = input(f"{style.YELLOW}Custom Brawler Name:\n{style.WHITE}")
+                                                df.loc[index,'Name'] = hue
+                                                df.to_csv('./output/characters_1.csv', index=False)
+                                                ho = int(input("Want to change speed, damage, hitpoints?\n1. Yeah\n2. No\n"))
+                                                if ho == 1:
+                                                        ho2 = input("Speed:")
+                                                        ho3 = input("AutoAttack Damage:")
+                                                        ho4 = input("Hitpoints:")
+                                                        for index, row in df.iterrows():
+                                                                if df.loc[index,'Homeworld'] == "human":
+                                                                        df.loc[index,'Speed'] = ho2
+                                                                        df.loc[index,'AutoAttackDamage'] = ho3
+                                                                        df.loc[index,'Hitpoints'] = ho4
+                                                                        df.to_csv('./defolt/backuped/characters_1.csv', index=False)
+                                                                        with open('./defolt/backuped/characters_1.csv', 'r') as cum, open('./defolt/backuped/characters.csv', 'a') as es:
+                                                                            for line in cum:
+                                                                                if selectedcharacters in line:
+                                                                                    if "human" in line:
+                                                                                        es.write(line)
+                                                                                        shutil.copy("./defolt/backuped/characters.csv", "./output/characters.csv")
+                                                                                        shutil.copy("./defolt/backuped/characters_1.csv", "./output/characters_1.csv")
+                                                                                        print("Copied")
+                                                                                        time.sleep(3)
+                                                                                        clear()
+                                        
+                                                    
+                                                elif ho == 2:
+                                                        df.to_csv('./defolt/backuped/characters_1.csv', index=False)
+                                                        with open('./defolt/backuped/characters_1.csv', 'r') as cum, open('./defolt/backuped/characters.csv', 'a') as es:
+                                                                for line in cum:
+                                                                        if selectedcharacters in line:
+                                                                                if "human" in line:
+                                                                                        es.write(line)
+                                                                                        shutil.copy("./defolt/backuped/characters.csv", "./output/characters.csv")
+                                                                                        shutil.copy("./defolt/backuped/characters_1.csv", "./output/characters_1.csv")
+                                                                                        print("Copied")
+                                                                                        time.sleep(3)
+                                                                                        clear()
 
 def copyrus():
      shutil.copy("./defolt/files/characters.csv", "./output/characters.csv")
@@ -142,17 +166,17 @@ def copyrus():
                            of.write(line)
      df = pd.read_csv("./output/characters_1.csv")
      for index, row in df.iterrows():
-                    	if df.loc[index,'Type'] == "Hero":
-                    		df.loc[index,'Type'] = "Minion_Building"
-                    		hue = input(f"{style.YELLOW}Имя Кастом Бойца:\n{style.WHITE}")
-                    		df.loc[index,'Name'] =hue
-                    		df.to_csv('./output/characters_1.csv', index=False)
-                    	
+                                if df.loc[index,'Type'] == "Hero":
+                                                df.loc[index,'Type'] = "Minion_Building"
+                                                hue = input(f"{style.YELLOW}Имя Кастом Бойца:\n{style.WHITE}")
+                                                df.loc[index,'Name'] =hue
+                                                df.to_csv('./output/characters_1.csv', index=False)
+                                
      with open('./output/characters_1.csv', 'r') as ef, open('./output/characters.csv', 'a') as of:
             for line in ef:
                 if selectedcharacters in line:
                     if "human" in line:
-                    	of.write(line)
+                                of.write(line)
             print("Скопирован")
             time.sleep(3)
             clear()
@@ -180,10 +204,10 @@ if os.path.isfile("./eng.json"):
                     shutil.copy("./output/tutorial.csv", "./defolt/backuped/tutorial.csv")
             for index, row in df.iterrows():
                if df.loc[index,'SpawnCharacter'] == "TutorialDummy2":
-                    df.loc[index,'SpawnCharacter'] = franxx
-                    df.to_csv('tutorial.csv', index=False)
-                    shutil.copy("./tutorial.csv", "./output/tutorial.csv")
-                    shutil.copy("./output/tutorial.csv", "./defolt/backuped/tutorial.csv")
+                               df.loc[index,'SpawnCharacter'] = franxx
+                               df.to_csv('tutorial.csv', index=False)
+                               shutil.copy("./tutorial.csv", "./output/tutorial.csv")
+                               shutil.copy("./output/tutorial.csv", "./defolt/backuped/tutorial.csv")
             for index, row in df.iterrows():
                 if df.loc[index,'SpawnCharacter'] == "TutorialDummy3":
                     df.loc[index,'SpawnCharacter'] = franxx
@@ -193,30 +217,57 @@ if os.path.isfile("./eng.json"):
             clear()
         elif pon == 2:
             if os.path.isfile("./defolt/backuped/characters.csv") and os.path.isfile("./defolt/backuped/characters_1.csv"):
-                franxx2 = int(input("Use backup?\n1. Да\n2. Нет\n"))
+                shutil.copy("./defolt/files/characters_1.csv", "./defolt/backuped/characters_1.csv")
+                franxx2 = int(input("Use backup?\n1. Yeah\n2. No\n"))
                 if franxx2 == 1:
+                        
                      selectedcharacters = input("shelly\ncolt\nbull\nbrock\nricochet\nspike\nbarley\njessie\nnita\ndynamike\nelprimo\nmortis\ncrow\npoco\nbo\npiper\npam\ntara\ndarryl\npenny\nfrank\ngene\ntick\nleon\nrosa\ncarl\nbibi\n8bit\nsandy\nbea\nemz\nmr.p\nmax\njacky\ngale\nnani\nsprout\nsurge\ncolette\namber\nlou\nbyron\nedgar\nruffs\nstu\nbelle\nsqueak\ngrom\nbuzz\ngriff\nash\nmeg\nlolla\nfang\nFlea\njanet\nbonnie\notis\nsam\ngus\nbuster\nchester\ngray\nmandy\n Select: ")
                      with open('./defolt/backuped/characters.csv', 'r') as ef, open('./defolt/backuped/characters_1.csv', 'a') as of:
-                     		for line in ef:
-                     			if selectedcharacters in line:
-                     				if "human" in line:
-                     					of.write(line)
+                                                for line in ef:
+                                                                if selectedcharacters in line:
+                                                                                if "human" in line:
+                                                                                                of.write(line)
                      df = pd.read_csv("./defolt/backuped/characters_1.csv")
                      for index, row in df.iterrows():
-                     	if df.loc[index,'Type'] == "Hero":
-                     		df.loc[index,'Type'] = "Minion_Building"
-                     		hue = input(f"{style.YELLOW}Custom Brawler Name:\n{style.WHITE}")
-                     		df.loc[index,'Name'] = hue
-                     		df.to_csv('./defolt/backuped/characters_1.csv', index=False)
-                    	
-                     with open('./defolt/backuped/characters_1.csv', 'r') as cum, open('./defolt/backuped/characters.csv', 'a') as es:
-                     		for line in cum:
-                     			if selectedcharacters in line:
-                     			            if "human" in line:
-                     			                        es.write(line)
-                     print("Copied")
-                     time.sleep(3)
-                     clear()
+                                if df.loc[index,'Type'] == "Hero":
+                                                df.loc[index,'Type'] = "Minion_Building"
+                                                hue = input(f"{style.YELLOW}Custom Brawler Name:\n{style.WHITE}")
+                                                df.loc[index,'Name'] = hue
+                                                ho = int(input("Want to change speed, damage, hitpoints?\n1. Yeah\n2. No\n"))
+                                                if ho == 1:
+                                                        ho2 = input("Speed:")
+                                                        ho3 = input("AutoAttack Damage:")
+                                                        ho4 = input("Hitpoints:")
+                                                        for index, row in df.iterrows():
+                                                                if df.loc[index,'Homeworld'] == "human":
+                                                                        df.loc[index,'Speed'] = ho2
+                                                                        df.loc[index,'AutoAttackDamage'] = ho3
+                                                                        df.loc[index,'Hitpoints'] = ho4
+                                                                        df.to_csv('./defolt/backuped/characters_1.csv', index=False)
+                                                                        with open('./defolt/backuped/characters_1.csv', 'r') as cum, open('./defolt/backuped/characters.csv', 'a') as es:
+                                                                            for line in cum:
+                                                                                if selectedcharacters in line:
+                                                                                    if "human" in line:
+                                                                                        es.write(line)
+                                                                                        shutil.copy("./defolt/backuped/characters.csv", "./output/characters.csv")
+                                                                                        shutil.copy("./defolt/backuped/characters_1.csv", "./output/characters_1.csv")
+                                                                                        print("Copied")
+                                                                                        time.sleep(3)
+                                                                                        clear()
+                                        
+                                                    
+                                                elif ho == 2:
+                                                        df.to_csv('./defolt/backuped/characters_1.csv', index=False)
+                                                        with open('./defolt/backuped/characters_1.csv', 'r') as cum, open('./defolt/backuped/characters.csv', 'a') as es:
+                                                                for line in cum:
+                                                                        if selectedcharacters in line:
+                                                                                if "human" in line:
+                                                                                        es.write(line)
+                                                                                        shutil.copy("./defolt/backuped/characters.csv", "./output/characters.csv")
+                                                                                        shutil.copy("./defolt/backuped/characters_1.csv", "./output/characters_1.csv")
+                                                                                        print("Copied")
+                                                                                        time.sleep(3)
+                                                                                        clear()                                                                                      
                 elif franxx2 == 2:
                      copyeng()
                      time.sleep(3)
@@ -225,7 +276,7 @@ if os.path.isfile("./eng.json"):
                 copyeng()
                 time.sleep(3)
                 clear()
-        	
+                
         elif pon == 3:
             quit()
 elif os.path.isfile("./rus.json"):
@@ -266,23 +317,23 @@ elif os.path.isfile("./rus.json"):
                 if franxx2 == 1:
                      selectedcharacters = input("shelly\ncolt\nbull\nbrock\nricochet\nspike\nbarley\njessie\nnita\ndynamike\nelprimo\nmortis\ncrow\npoco\nbo\npiper\npam\ntara\ndarryl\npenny\nfrank\ngene\ntick\nleon\nrosa\ncarl\nbibi\n8bit\nsandy\nbea\nemz\nmr.p\nmax\njacky\ngale\nnani\nsprout\nsurge\ncolette\namber\nlou\nbyron\nedgar\nruffs\nstu\nbelle\nsqueak\ngrom\nbuzz\ngriff\nash\nmeg\nlolla\nfang\nFlea\njanet\nbonnie\notis\nsam\ngus\nbuster\nchester\ngray\nmandy\n Выберете: ")
                      with open('./defolt/backuped/characters.csv', 'r') as ef, open('./defolt/backuped/characters_1.csv', 'a') as of:
-                     		for line in ef:
-                     			if selectedcharacters in line:
-                     				if "human" in line:
-                     					of.write(line)
+                                                for line in ef:
+                                                                if selectedcharacters in line:
+                                                                                if "human" in line:
+                                                                                                of.write(line)
                      df = pd.read_csv("./defolt/backuped/characters_1.csv")
                      for index, row in df.iterrows():
-                     	if df.loc[index,'Type'] == "Hero":
-                     		df.loc[index,'Type'] = "Minion_Building"
-                     		hue = input(f"{style.YELLOW}Имя Кастом Бойца:\n{style.WHITE}")
-                     		df.loc[index,'Name'] = hue
-                     		df.to_csv('./defolt/backuped/characters_1.csv', index=False)
-                    	
+                                if df.loc[index,'Type'] == "Hero":
+                                                df.loc[index,'Type'] = "Minion_Building"
+                                                hue = input(f"{style.YELLOW}Имя Кастом Бойца:\n{style.WHITE}")
+                                                df.loc[index,'Name'] = hue
+                                                df.to_csv('./defolt/backuped/characters_1.csv', index=False)
+                                
                      with open('./defolt/backuped/characters_1.csv', 'r') as cum, open('./defolt/backuped/characters.csv', 'a') as es:
-                     		for line in cum:
-                     			if selectedcharacters in line:
-                     			            if "human" in line:
-                     			                        es.write(line)
+                                                for line in cum:
+                                                                if selectedcharacters in line:
+                                                                            if "human" in line:
+                                                                                        es.write(line)
                      print("Скопирован")
                      time.sleep(3)
                      clear()
